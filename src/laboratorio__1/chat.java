@@ -190,8 +190,12 @@ public class chat extends javax.swing.JFrame {
     
     
     private void enviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseClicked
-        String prpt = txtCaja.getText(); // Obtiene el texto del usuario
-String mensajePensando = "Bot: Pensando..."; // Mensaje de espera
+       
+        
+        String prpt = txtCaja.getText();
+        // Obtiene el texto del usuario
+        if(prpt == null){
+            String mensajePensando = "Bot: Pensando..."; // Mensaje de espera
 
 // Agrega mensaje del usuario y "pensando..." al arreglo chat
 boolean s = false;
@@ -243,6 +247,10 @@ new SwingWorker<String, Void>() {
         }
     }
 }.execute();
+        }else{
+            JOptionPane.showMessageDialog(null, "Caja de texto vacía, ingresa una pregunta o instrucción para E.V.A.");
+        }
+
        
        
         
