@@ -52,7 +52,6 @@ public class chat extends javax.swing.JFrame {
          jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("out.png")));
          
     }
-
  
     
     /**
@@ -187,14 +186,12 @@ public class chat extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
-    private void enviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseClicked
-       
-        
-        String prpt = txtCaja.getText();
+
+    public void enviarMensaje(String x){
+
+        String x = txtCaja.getText();
         // Obtiene el texto del usuario
-        if(prpt != null){
+        if(x != null){
             String mensajePensando = "Bot: Pensando..."; // Mensaje de espera
 
 // Agrega mensaje del usuario y "pensando..." al arreglo chat
@@ -237,7 +234,8 @@ new SwingWorker<String, Void>() {
                     chat[i + 1] = "Bot: " + respuesta;
                     break;
                 }
-            }
+
+   
 
             // Actualiza la interfaz con la respuesta
             Chat.setListData(chat);
@@ -249,9 +247,13 @@ new SwingWorker<String, Void>() {
 }.execute();
         }else{
             if( txtCaja.getText() == null)
-            JOptionPane.showMessageDialog(null, "Caja de texto vacía, ingresa una pregunta o instrucción para E.V.A.");
+            JOptionPane.showMessageDialog(null, "Caja de texto vacía, ingresa una pregunta o instrucción para E.V.A.","ERROR_MESSAGE", JOptionPane.ERROR_MESSAGE);
         }
+     private void enviarMouseClicked(java.awt.event.MouseEvent evt) {                                    
+        String x = txtCaja.getText();
+        enviarMensaje(x);
 
+    }
        
        
         
@@ -262,6 +264,7 @@ new SwingWorker<String, Void>() {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
     }//GEN-LAST:event_enviarMouseClicked
+
     
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         this.dispose();
@@ -288,7 +291,10 @@ new SwingWorker<String, Void>() {
         
     }//GEN-LAST:event_hstrlMouseClicked
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {
+        historial();
+    }
+    public void historial(){
         historial[c][0] = "Chat " + (c + 1);
         for (int i = 0; i < chat.length - 1; i++) {
             if (chat[i] != null) {
@@ -305,8 +311,7 @@ new SwingWorker<String, Void>() {
         }
         hstrl.setListData(in);
         Chat.setListData(chat);
-    }//GEN-LAST:event_jButton3MouseClicked
-
+    }
     /**
      * @param args the command line arguments
      * @throws java.net.MalformedURLException
