@@ -21,6 +21,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.json.JSONObject;
+import javax.swing.SwingWorker;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -187,28 +190,69 @@ public class chat extends javax.swing.JFrame {
     
     
     private void enviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseClicked
+       
+        
         String prpt = txtCaja.getText();
-        String respuesta = null;
+        // Obtiene el texto del usuario
+        if(prpt != null){
+            String mensajePensando = "Bot: Pensando..."; // Mensaje de espera
+
+// Agrega mensaje del usuario y "pensando..." al arreglo chat
+boolean s = false;
+for (int i = 0; i < chat.length - 1; i += 2) {
+    if (chat[i] == null) {
+        chat[i] = "Usuario: " + prpt;
+        chat[i + 1] = mensajePensando; // Mensaje temporal
+        txtCaja.setText(""); // Limpia la caja de texto del usuario
+        s = true;
+        break;
+    }
+}
+
+if (s) {
+    Chat.setListData(chat); // Actualiza la lista con el mensaje "pensando..."
+}
+
+// Usa SwingWorker para realizar la llamada a la API en segundo plano
+new SwingWorker<String, Void>() {
+    @Override
+    protected String doInBackground() {
         try {
-            respuesta = ChatBotAPI.sendMessage(prpt);
+            // Llama a la API de la IA y retorna la respuesta
+            return ChatBotAPI.sendMessage(prpt);
         } catch (Exception ex) {
             Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
+            return "Error al obtener respuesta"; // Mensaje en caso de error
         }
-        boolean s = false;
-        for (int i = 0; i < chat.length - 1; i += 2) {
-            if (chat[i] == null) {
-                chat[i] = "Usuario: " + prpt;
-                chat[i + 1] = "Bot: " + respuesta;
-                txtCaja.setText("");
-                s = true;
-                break;
+    }
+
+    @Override
+    protected void done() {
+        try {
+            String respuesta = get(); // Obtiene la respuesta de la IA
+
+            // Reemplaza el mensaje "pensando..." con la respuesta real
+            for (int i = 0; i < chat.length - 1; i += 2) {
+                if (chat[i] != null && chat[i + 1].equals(mensajePensando)) {
+                    chat[i + 1] = "Bot: " + respuesta;
+                    break;
+                }
             }
 
-        }
-        if (s) {
+            // Actualiza la interfaz con la respuesta
             Chat.setListData(chat);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+}.execute();
+        }else{
+            if( txtCaja.getText() == null)
+            JOptionPane.showMessageDialog(null, "Caja de texto vacía, ingresa una pregunta o instrucción para E.V.A.");
         }
 
+       
        
         
         
